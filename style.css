@@ -1,0 +1,388 @@
+/* Paleta de cores e variáveis globais */
+:root {
+    --white: #ffffff;
+    --black: #020202;
+    /* Nova paleta de cores */
+    --primary: #2c3e50;    /* Azul escuro elegante para navbar e footer */
+    --primary-hover: #34495e; /* Cor para hover */
+    --content: #CCE5FF;    /* Cinza muito claro para o fundo do content */
+    --text-dark: #2c3e50;  /* Cor principal para textos */
+    --accent: #3498db;     /* Cor de destaque para elementos interativos */
+    --card-bg: #ffffff;    /* Cor de fundo para cards */
+}
+
+/* Reset de margens, paddings e box-sizing para todos os elementos */
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Fonte padrão do corpo da página */
+body{
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* viewport height */
+}
+
+/* Barra de navegação principal */
+.navbar{
+    background-color: var(--primary);
+    color: var(--white);
+    padding: 5px;
+    margin: 0;
+    justify-items: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Lista de navegação (menu) */
+.nav{
+    padding: 10px;
+    list-style: none;
+    margin: 5px;
+    display: flex;
+    justify-content: flex-start;
+}
+
+/* Itens do menu */
+.nav li{
+    display: inline;
+    margin: 0;
+    padding: 0;
+}
+
+/* Estilo dos links do menu */
+a{
+    text-decoration: none;
+    color: var(--white);
+    padding: 10px;
+    margin: 20px;
+}
+
+/* Efeito hover nos links do menu */
+.nav li a:hover{
+    color: var(--white);
+    background-color: var(--primary-hover);
+    transition: all 0.3s ease;
+}
+
+/* Container principal do conteúdo */
+.content{
+    background-color: var(--content);
+    color: var(--text-dark);
+    padding: 20px;
+    margin: 0;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    flex: 1;
+}
+
+/* Seção Sobre Mim */
+#sobre-mim{
+    color: var(--black);
+    padding: 20px;
+    text-align: center;
+}
+.img-eu {
+    width: 200px;
+    height: auto;
+    border-radius: 20px;
+    margin-bottom: 20px;
+    padding: 10px;
+    display: block;
+}
+.sobre-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    text-align: justify;
+}
+
+.sobre-texto{
+    max-width: 600px;
+    margin-left: 0;
+    margin-top: 0;
+    color: var(--text-dark);
+}
+
+
+/* Seção Formação Acadêmica */
+#i-formacao{
+    color: var(--black);
+    padding: 20px;
+}
+
+
+/* Seção Portfólio */
+#my-portifolio{
+    color: var(--black);
+    padding: 20px;
+    text-align: center;
+}
+
+/* Remove marcadores da lista do portfólio */
+#my-portifolio li{
+    list-style: none;
+}
+
+/* Container dos itens do portfólio: estrutura semelhante à formação */
+.portifolio-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    align-items: flex-start;
+    margin-top: 20px;
+    justify-content: center;
+}
+
+/* Cada item do portfólio */
+.portifolio-item {
+    flex: 1 1 320px;
+    min-width: 280px;
+    max-width: 280px;
+    display: block;
+    background: var(--card-bg);
+    border-radius: 8px;
+    padding: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    box-sizing: border-box;
+}
+.portifolio-item:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    transform: translateY(-2px);
+    transition: all 0.3s ease;
+}
+
+/* Imagem do item do portfólio */
+.portifolio-item img {
+    margin-right: 15px;
+    width: 120px;
+    height: 100px;
+    border-radius: 10px;
+}
+
+/* Botão do item do portfólio */
+.portifolio-item button {
+    background-color: var(--accent);
+    color: var(--white);
+    border: none;
+    padding: 10px 40px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background-color 0.3s ease;
+}
+.portifolio-item button:hover {
+    background-color: var(--primary);
+}
+
+/* Container dos itens de formação: usa flexbox para alinhar lado a lado e responsivo */
+.formacao-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    justify-content: center;
+    margin-top: 20px;
+    text-align: center; /* Centraliza o texto dentro dos itens */
+}
+
+/* Cada item de formação */
+.formacao-item {
+    flex: 1 1 320px;
+    min-width: 280px;
+    max-width: 280px;
+    display: block;
+    background: var(--card-bg);
+    border-radius: 8px;
+    padding: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    box-sizing: border-box;
+}
+.formacao-item:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    transform: translateY(-2px);
+    transition: all 0.3s ease;
+}
+
+
+
+/* Imagem do item de formação */
+.formacao-item img {
+    margin-right: 15px;
+    width: 120px;
+    height: auto;
+    border-radius: 10px;
+}
+
+footer {
+    background-color: var(--primary);
+    color: var(--white);
+    text-align: center;
+    margin-top: auto; /* Isso empurra o footer para baixo */
+    box-shadow: 0 -2px 4px rgba(0,0,0,0.1);
+}
+.social-icons {
+    display: flex;
+    justify-content: center;
+}
+
+/* Estilo do formulário de contato */
+#form-contato {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 30px;
+    background: var(--card-bg);
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+#form-contato h2 {
+    color: var(--primary);
+    margin-bottom: 25px;
+    text-align: center;
+    font-size: 2em;
+}
+
+#form-contato form {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+#form-contato label {
+    font-weight: 400;
+    color: var(--text-dark);
+    margin-bottom: 5px;
+}
+
+#form-contato input,
+#form-contato textarea {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #e1e1e1;
+    border-radius: 6px;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    outline: none;
+}
+
+#form-contato input:focus,
+#form-contato textarea:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+}
+
+#form-contato textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+#form-contato button {
+    background-color: var(--accent);
+    color: var(--white);
+    padding: 14px 28px;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+    margin-top: 10px;
+}
+
+#form-contato button:hover {
+    background-color: var(--primary);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(52, 152, 219, 0.2);
+}
+
+/* Adicione animação de loading ao botão */
+#form-contato button:active {
+    transform: translateY(0);
+    box-shadow: none;
+}
+
+/* Estilo para mensagens de validação */
+#form-contato input:invalid,
+#form-contato textarea:invalid {
+    border-color: #e74c3c;
+}
+/* Responsividade do formulário */
+@media (max-width: 768px) {
+    #form-contato {
+        margin: 20px;
+        padding: 20px;
+    }
+    
+    #form-contato h2 {
+        font-size: 1.5em;
+    }
+    
+    #form-contato input,
+    #form-contato textarea,
+    #form-contato button {
+        padding: 10px;
+    }
+}
+
+
+/* Responsividade para telas menores */
+@media (max-width: 900px) {
+    .content {
+        padding: 10px;
+    }
+    .formacao-container,
+    .portifolio-container {
+        flex-direction: column;   /* Empilha os itens verticalmente */
+        gap: 20px;
+    }
+    .formacao-item,
+    .portifolio-item {
+        max-width: 100%;          /* Ocupa toda a largura disponível */
+        min-width: 100%;
+        flex: 1 1 100%;
+        padding: 10px 5px;
+    }
+    .formacao-item img,
+    .portifolio-item img {
+        width: 80px;              /* Imagens menores em telas pequenas */
+        margin-right: 10px;
+    }
+    .nav {
+        flex-direction:row;   /* Menu vertical */
+        justify-content: space-around;
+        align-items: flex-start;
+        margin: 0;
+        padding: 0;
+    }
+    .nav li {
+        display: block;
+        margin: 0;
+        padding: 0;
+    }
+    a {
+        margin: 5px 0;
+        padding: 10px 5px;
+        width: 100%;
+        display: block;
+    }
+    #sobre-mim, #i-formacao, #my-portifolio, #form-contato {
+        padding: 10px 0;
+    }
+    form {
+        padding: 0 5px;
+    }
+}
+
+/* Ajuste extra para telas muito pequenas */
+@media (max-width: 500px) {
+    h1, h2, h3 {
+        font-size: 1.1em;
+    }
+    .formacao-item img,
+    .portifolio-item img {
+        width: 60px;
+    }
+}

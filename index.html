@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="Pt-Br">
+<head>
+    <!-- Metadados e links de estilos/scripts -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meu Portifolio</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+    <!-- Ícones FontAwesome -->
+    <script src="https://kit.fontawesome.com/fc795f3f4c.js" crossorigin="anonymous"></script>
+</head>
+<body>
+
+    <!-- Barra de navegação principal -->
+    <div class="navbar">
+        <ul class="nav">
+            <!-- Cada link navega para uma seção -->
+            <li><a href="#sobre" id="sobre">Sobre</a></li>
+            <li><a href="#formacao" id="formacao">Formação</a></li>
+            <li><a href="#portifolio" id="portifolio">Portifolio</a></li>
+            <li><a href="#contato" id="contato">Contato</a></li>
+        </ul>
+    </div>
+
+    <!-- Container principal do conteúdo -->
+    <div class="content">
+        <!-- Seção Sobre Mim -->
+        <section id="sobre-mim">
+            <div class="sobre-container">
+                <img src="images/Eu.jpg" class="img-eu"alt="Foto do autor">
+                <div class="sobre-texto">
+                    <h2>Olá, eu sou o <span>Jocerlan</span></h2>
+                    <p>Sou um estudante de Engenharia de Software apaixonado por tecnologia e desenvolvimento web. Desde cedo, me interessei por computadores e programação, o que me levou a seguir essa carreira.</p>
+                    <p>Atualmente, estou cursando Engenharia de Software na UNINTER e trabalhando como Analista de Suporte Técnico. Meu objetivo é me tornar um desenvolvedor full-stack e contribuir para projetos inovadores.</p>
+        </section>
+
+        <!-- Seção Formação Acadêmica -->
+        <section id="i-formacao">
+            <div class="formacao-container">
+                <!-- Cada .formacao-item representa uma etapa da formação -->
+                <div class="formacao-item">
+                    <img src="images/censc.jpg" alt="Ensino Médio">
+                    <div>
+                        <h3>Ensino médio</h3>
+                        <p>Escola Nossa senhora da Conceição - Viana-MA 2017,</p>
+                        <p>Aqui inicia o sonho de seguir carreira na informatica</p>
+                    </div>
+                </div>
+                <div class="formacao-item">
+                    <img src="images/Ifma.png" alt="Formação Tecnica">
+                    <div>
+                        <h3>Nivel Tecnico</h3>
+                        <p>Instituto Federal do Maranhão - Viana-MA 2018</p>
+                        <p>Meu primeiro passo para o crescimento na area, cursei analise e desenvolvimento de sistemas</p>
+                    </div>
+                </div>
+                <div class="formacao-item">
+                    <img src="images/ufma.png" alt="Formação Superior">
+                    <div>
+                        <h3>Nivel Superior</h3>
+                        <p>Universidade Federal do Maranhão - Viana-MA 2019</p>
+                        <p>Aqui não tive progresso fiquei apenas 1 ano e meio, não gostei por ser licenciatura, aqui cursei Ciências da Computação</p>
+                    </div>
+                </div>
+                 <div class="formacao-item">
+                    <img src="images/uninter.png" alt="Formação Superior">
+                    <div>
+                        <h3>Nivel Superior</h3>
+                        <p>Centro Universiatario Internacional - Viana-MA 2025</p>
+                        <p>Aqui finalmente estou cursando um curso que realmente me identifico, Engenharia de Software</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção Portfólio de Projetos -->
+        <section id="my-portifolio">
+            <div class="portifolio-container">
+                <!-- Cada .portifolio-item representa um projeto -->
+                <div class="portifolio-item">
+                    <img src="images/relatorio-sistema.png" alt="Projeto relatorio-sistema">
+                    <div>
+                        <h3>Projeto Relatorios</h3>
+                        <p>Este projeto foi voltado a empresa em que trabalho com o intuito de facilitar a contabilização de metricas de cada tecnico bem como suas comissões.</p>
+                        <br>
+                        <p>Tecnologias utilizadas</p>
+                        <br>
+                        <!-- Ícones das tecnologias -->
+                        <i class="fa-brands fa-python fa-xl"></i>
+                        <i class="fa-brands fa-github fa-xl"></i>
+                        <i class="fa-brands fa-css3 fa-xl"></i>
+                        <i class="fa-solid fa-database fa-xl"></i>
+                        <br>
+                        <!-- Link para o projeto -->
+                        <a href="http://179.42.103.9:5000"><button>Ver projeto</button></a>
+                    </div>
+                </div>
+
+                    <div class="portifolio-item">
+                    <img src="images/insights.png" alt="Projeto relatorio-sistema">
+                    <div>
+                        <h3>Projeto Insights Trimestrais</h3>
+                        <p>Este projeto foi aplicado no local onde trabalho para criar dashboards para apresentações de resultados trimestrais do setores que administro.</p>
+                        <br>
+                        <p>Tecnologias utilizadas</p>
+                        <br>
+                        <i class="fa-brands fa-react fa-xl"></i>
+                        <i class="fa-brands fa-github fa-xl"></i>
+                        <i class="fa-brands fa-python fa-xl"></i>
+                        <i class="fa-brands fa-css3 fa-xl"></i>
+                        <i class="fa-solid fa-database fa-xl"></i>
+                        <br>
+                        <a href="https://trimestre-insights-dashboard.vercel.app/"><button>Ver projeto</button></a>
+                    </div>
+                </div>
+
+                    <div class="portifolio-item">
+                    <img src="images/exogram.png" alt="Projeto relatorio-sistema">
+                    <div>
+                        <h3>Projeto Exogram</h3>
+                        <p>Este projeto faz parte de um experimento criado em partes com IA e partes com conhecimentos proprios, a ideia era criar uma rede social parecida com o telegram</p>
+                        <br>
+                        <p>Tecnologias utilizadas</p>
+                        <br>
+                        <i class="fa-brands fa-react fa-xl"></i>
+                        <i class="fa-brands fa-github fa-xl"></i>
+                        <i class="fa-brands fa-css3 fa-xl"></i>
+                        <i class="fa-solid fa-database fa-xl"></i>
+                        <br>
+                        <a href="https://exogram-xi.vercel.app/"><button>Ver projeto</button></a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção de Contato -->
+        <section id="form-contato">
+            <form>
+                <h2>Contato</h2>
+                <!-- Campos do formulário -->
+                <label for="nome">Nome:</label>
+                <input type="text" id="nome" name="nome" placeholder="Digite seu nome" required>
+                
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" placeholder="Digite seu e-mail" required>
+                
+                <label for="mensagem">Mensagem:</label>
+                <textarea id="mensagem" name="mensagem" placeholder="Digite sua mensagem" required></textarea>
+                
+                <button type="submit">Enviar</button>
+            </form>
+        </section>
+    </div>
+
+    <!-- Rodapé -->
+    <footer>
+        <p>Desenvolvido por Jocerlan</p>
+        <div class="social-icons">
+            <!-- Ícones de redes sociais -->
+        <a class="fa-brands fa-instagram fa-xl" href="https://instagram.com/jocerlann" aria-label="Instagram de Jocerlan"></a>
+        <a class="fa-brands fa-facebook-f fa-xl" href="https://www.facebook.com/profile.php?id=61551536793723" aria-label="Facebook de Jocerlan"></a>
+        <a class="fa-brands fa-github fa-xl" href="https://github.com/jocerlan" aria-label="github de Jocerlan"></a>
+    </div>
+        <p>© 2025 Jocerlan. Todos os direitos reservados.</p>
+    </footer>  
+</body>
+</html>

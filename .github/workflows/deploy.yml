@@ -1,0 +1,31 @@
+name: Deploy Docker Site
+
+on:
+  push:
+    branches:
+      - main  # ou a branch que você quer monitorar
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Setup SSH
+      uses: webfactory/ssh-agent@v0.8.1
+      with:
+        ssh-private-key: ${{ secrets.EC2_SSH_KEY }}
+
+    - name: Deploy to EC2
+      run: |
+        ssh -o StrictHostKeyChecking=no ec2-user@${{ secrets.EC2_HOST }} "
+        cd /home/ec2-user/meu-site || mkdir -p /home/ec2-user/meu-site
+        git pull origin main || git clone https://github.com/jocerlan/portifolio.git /home/ec2-user/meu-site
+        cd /home/ec2-user/meu-site
+        docker build -t site-estatico .
+        docker stop site-estatico || true
+        docker rm site-estatico || true
+        docker run -d -p 8080:80 --name site-estatico site-estatico
+        "

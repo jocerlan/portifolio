@@ -23,7 +23,7 @@ body{
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
     display: flex;
     flex-direction: column;
-    min-height: 100vh; /* viewport height */
+    min-height: 100vh;
 }
 
 /* Barra de navegação principal */
@@ -56,15 +56,24 @@ body{
 a{
     text-decoration: none;
     color: var(--white);
-    padding: 10px;
+    padding: 30px 30px 10px 20px;
     margin: 20px;
 }
 
 /* Efeito hover nos links do menu */
 .nav li a:hover{
     color: var(--white);
+    border-bottom: 10px solid var(--accent);
     background-color: var(--primary-hover);
     transition: all 0.3s ease;
+}
+
+/* Estilo para links ativos */
+.nav li a.active{
+    color: var(--white);
+    border-bottom: 10px solid var(--accent);
+    background-color: var(--primary-hover);
+    font-weight: bold;
 }
 
 /* Container principal do conteúdo */
@@ -97,6 +106,8 @@ a{
     align-items: center;
     justify-content: center;
     text-align: justify;
+    padding: 10px;
+    margin: 10px;
 }
 
 .sobre-texto{

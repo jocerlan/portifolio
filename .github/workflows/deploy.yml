@@ -20,11 +20,11 @@ jobs:
 
     - name: Deploy to EC2
       run: |
-        ssh -o StrictHostKeyChecking=no ec2-user@${{ secrets.EC2_HOST }} "
+        ssh -o StrictHostKeyChecking=no ec2-user@admin "
         mkdir -p /home/ec2-user/meu-site
         if [ ! -d /home/ec2-user/meu-site/.git ]; then
           rm -rf /home/ec2-user/meu-site
-          git clone https://github.com/SEU_USUARIO/SEU_REPOSITORIO.git /home/ec2-user/meu-site
+          git clone https://github.com/jocerlan/portifolio.git /home/ec2-user/meu-site
         else
           cd /home/ec2-user/meu-site && git pull origin main
         fi

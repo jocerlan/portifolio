@@ -1,43 +1,38 @@
-name: Deploy Docker Site
+name: Deploy to EC2
 
 on:
   push:
     branches:
-      - main  # branch que dispara o deploy
+      - main  # dispara quando fizer push na branch main
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v3
+      - name: Checkout código
+        uses: actions/checkout@v3
 
-    - name: Setup SSH
-      uses: webfactory/ssh-agent@v0.7.0
-      with:
-        ssh-private-key: ${{ secrets.EC2_SSH_KEY }}
+      - name: Configurar SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H 52.15.60.11 >> ~/.ssh/known_hosts
 
-    - name: Deploy to EC2
-      run: |
-        ssh -o StrictHostKeyChecking=no ec2_user@${{ secrets.EC2_HOST }} "
-        cd /home/ec2-user/meu-site || mkdir -p /home/ec2-user/meu-site
-        git pull origin main || git clone https://github.com/jocerlan/portifolio.git /home/ec2-user/meu-site
-        cd /home/ec2-user/meu-site
+      - name: Deploy no servidor
+        run: |
+          ssh -o StrictHostKeyChecking=no ec2_user@52.15.60.11 "
+            cd /home/ec2_user || exit
+            if [ ! -d meu-site ]; then
+              git clone https://github.com/jocerlan/portifolio.git meu-site
+            fi
+            cd meu-site
+            git reset --hard
+            git pull origin main
 
-        # Baixar a última versão do site
-        if [ ! -d .git ]; then
-          git clone https://github.com/jocerlan/portifolio.git . 
-        else
-          git reset --hard
-          git pull origin main
-        fi
-
-        # Construir a imagem Docker
-        docker build -t site-estatico .
-
-        # Reiniciar o container
-        docker stop site-estatico || true
-        docker rm site-estatico || true
-        docker run -d -p 8080:80 --name site-estatico site-estatico
-        "
+            docker stop site-estatico || true
+            docker rm site-estatico || true
+            docker build -t site-estatico .
+            docker run -d -p 80:80 --name site-estatico site-estatico
+          "

@@ -18,14 +18,14 @@ jobs:
           mkdir -p ~/.ssh
           echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan -H EC2_HOST >> ~/.ssh/known_hosts
+          ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
 
       - name: Testar conexão SSH
-        run: ssh -o StrictHostKeyChecking=no admin@EC2_HOST "echo ✅ Conexão OK!"
+        run: ssh -o StrictHostKeyChecking=no admin@${{ secrets.EC2_HOST }} "echo ✅ Conexão OK!"
 
       - name: Deploy no servidor
         run: |
-          ssh -o StrictHostKeyChecking=no admin@EC2_HOST "
+          ssh -o StrictHostKeyChecking=no admin@${{ secrets.EC2_HOST }} "
             cd /home/admin || exit
             if [ ! -d meu-site ]; then
               git clone https://github.com/jocerlan/portifolio.git meu-site

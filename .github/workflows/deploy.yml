@@ -26,6 +26,7 @@ jobs:
       - name: Deploy no servidor
         run: |
           ssh -o StrictHostKeyChecking=no admin@${{ secrets.EC2_HOST }} "
+            sudo su
             cd /home/admin || exit
             if [ ! -d meu-site ]; then
               git clone https://github.com/jocerlan/portifolio.git meu-site

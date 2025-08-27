@@ -3,7 +3,7 @@ name: Deploy Docker Site
 on:
   push:
     branches:
-      - main  # ou a branch que você quer monitorar
+      - main  # branch que dispara o deploy
 
 jobs:
   deploy:
@@ -14,18 +14,35 @@ jobs:
       uses: actions/checkout@v3
 
     - name: Setup SSH
-      uses: webfactory/ssh-agent@v0.8.1
+      uses: webfactory/ssh-agent@v0.7.0
       with:
         ssh-private-key: ${{ secrets.EC2_SSH_KEY }}
 
     - name: Deploy to EC2
       run: |
-        ssh -o StrictHostKeyChecking=no ec2-user@${{ secrets.EC2_HOST }} "
-        cd /home/ec2-user/meu-site || mkdir -p /home/ec2-user/meu-site
-        git pull origin main || git clone https://github.com/jocerlan/portifolio.git /home/ec2-user/meu-site
+        ssh -o StrictHostKeyChecking=no EC2_USER@${{ secrets.EC2_HOST }} "
+        set -e
+        echo '📦 Atualizando código e Docker...'
+
+        # Criar pasta do projeto
+        mkdir -p /home/ec2-user/meu-site
         cd /home/ec2-user/meu-site
+
+        # Baixar a última versão do site
+        if [ ! -d .git ]; then
+          git clone https://github.com/jocerlan/portifolio.git . 
+        else
+          git reset --hard
+          git pull origin main
+        fi
+
+        # Construir a imagem Docker
         docker build -t site-estatico .
+
+        # Reiniciar o container
         docker stop site-estatico || true
         docker rm site-estatico || true
-        docker run -d -p 8080:80 --name site-estatico site-estatico
+        docker run -d -p 80:80 --name site-estatico site-estatico
+
+        echo '✅ Deploy concluído com sucesso!'
         "

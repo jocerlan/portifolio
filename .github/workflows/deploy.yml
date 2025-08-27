@@ -1,9 +1,9 @@
-name: Deploy to EC2
+name: Deploy to EC2 Debian
 
 on:
   push:
     branches:
-      - main  # dispara quando fizer push na branch main
+      - main
 
 jobs:
   deploy:
@@ -13,24 +13,26 @@ jobs:
       - name: Checkout código
         uses: actions/checkout@v3
 
-      - name: Configurar SSH
+      - name: Configurar chave SSH
         run: |
           mkdir -p ~/.ssh
           echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H 52.15.60.11 >> ~/.ssh/known_hosts
 
+      - name: Testar conexão SSH
+        run: ssh -o StrictHostKeyChecking=no admin@52.15.60.11 "echo ✅ Conexão OK!"
+
       - name: Deploy no servidor
         run: |
-          ssh -o StrictHostKeyChecking=no ec2_user@52.15.60.11 "
-            cd /home/ec2_user || exit
+          ssh -o StrictHostKeyChecking=no admin@52.15.60.11 "
+            cd /home/admin || exit
             if [ ! -d meu-site ]; then
               git clone https://github.com/jocerlan/portifolio.git meu-site
             fi
             cd meu-site
             git reset --hard
             git pull origin main
-
             docker stop site-estatico || true
             docker rm site-estatico || true
             docker build -t site-estatico .

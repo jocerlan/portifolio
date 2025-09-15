@@ -13,19 +13,20 @@ jobs:
       - name: Checkout código
         uses: actions/checkout@v3
 
-      - name: Configurar chave SSH
+      - name: Configurar chave SSH (Ed25519)
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/jocerlan
-          chmod 600 ~/.ssh/jocerlan
-          ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
+          echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -t ed25519 -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
 
       - name: Testar conexão SSH
-        run: ssh -o StrictHostKeyChecking=no jocerlan@${{ secrets.EC2_HOST }} "echo ✅ Conexão OK!"
+        run: |
+          ssh -i ~/.ssh/id_ed25519 -o StrictHostKeyChecking=no jocerlan@${{ secrets.EC2_HOST }} "echo ✅ Conexão OK!"
 
       - name: Deploy no servidor
         run: |
-          ssh -o StrictHostKeyChecking=no jocerlan@${{ secrets.EC2_HOST }} "
+          ssh -i ~/.ssh/id_ed25519 -o StrictHostKeyChecking=no jocerlan@${{ secrets.EC2_HOST }} "
             sudo su
             cd /home/jocerlan || exit
             if [ ! -d meu-site ]; then

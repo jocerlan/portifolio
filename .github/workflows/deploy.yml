@@ -21,13 +21,13 @@ jobs:
           ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
 
       - name: Testar conexão SSH
-        run: ssh -o StrictHostKeyChecking=no admin@${{ secrets.EC2_HOST }} "echo ✅ Conexão OK!"
+        run: ssh -o StrictHostKeyChecking=no jocerlan@${{ secrets.EC2_HOST }} "echo ✅ Conexão OK!"
 
       - name: Deploy no servidor
         run: |
-          ssh -o StrictHostKeyChecking=no admin@${{ secrets.EC2_HOST }} "
+          ssh -o StrictHostKeyChecking=no jocerlan@${{ secrets.EC2_HOST }} "
             sudo su
-            cd /home/admin || exit
+            cd /home/jocerlan || exit
             if [ ! -d meu-site ]; then
               git clone https://github.com/jocerlan/portifolio.git meu-site
             fi

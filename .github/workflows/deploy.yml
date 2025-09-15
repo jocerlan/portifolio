@@ -1,4 +1,4 @@
-name: Deploy to EC2 Debian
+name: Deploy to EC2 Debian 13
 
 on:
   push:
@@ -18,25 +18,34 @@ jobs:
           mkdir -p ~/.ssh
           echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
+          # adiciona host key do servidor Debian 13
           ssh-keyscan -t ed25519 -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
 
       - name: Testar conexão SSH
         run: |
-          ssh -i ~/.ssh/id_ed25519 -o StrictHostKeyChecking=no jocerlan@${{ secrets.EC2_HOST }} "echo ✅ Conexão OK!"
+          ssh -i ~/.ssh/id_ed25519 -o StrictHostKeyChecking=yes -o UserKnownHostsFile=~/.ssh/known_hosts \
+            jocerlan@${{ secrets.EC2_HOST }} "echo ✅ Conexão com Debian 13 OK!"
 
-      - name: Deploy no servidor
+      - name: Deploy no servidor Debian 13
         run: |
-          ssh -i ~/.ssh/id_ed25519 -o StrictHostKeyChecking=no jocerlan@${{ secrets.EC2_HOST }} "
-            sudo su
-            cd /home/jocerlan || exit
-            if [ ! -d meu-site ]; then
-              git clone https://github.com/jocerlan/portifolio.git meu-site
-            fi
-            cd meu-site
-            git reset --hard
-            git pull origin main
-            sudo docker stop site-estatico || true
-            sudo docker rm site-estatico || true
-            sudo docker build -t site-estatico .
-            sudo docker run -d -p 80:80 --name site-estatico site-estatico
-          "
+          ssh -i ~/.ssh/id_ed25519 -o StrictHostKeyChecking=yes -o UserKnownHostsFile=~/.ssh/known_hosts \
+            jocerlan@${{ secrets.EC2_HOST }} "
+              set -e
+              cd /home/jocerlan || exit
+              
+              if [ ! -d meu-site ]; then
+                git clone https://github.com/jocerlan/portifolio.git meu-site
+              fi
+
+              cd meu-site
+              git fetch origin main
+              git reset --hard origin/main
+
+              # parar e remover containers antigos se existirem
+              sudo docker stop site-estatico || true
+              sudo docker rm site-estatico || true
+
+              # reconstruir e subir container
+              sudo docker build -t site-estatico .
+              sudo docker run -d --restart always -p 80:80 --name site-estatico site-estatico
+            "

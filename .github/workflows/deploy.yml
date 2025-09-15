@@ -16,19 +16,19 @@ jobs:
       - name: Configurar chave SSH (Ed25519)
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/id_ed25519
-          chmod 600 ~/.ssh/id_ed25519
+          echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/jocerlan
+          chmod 600 ~/.ssh/jocerlan
           # adiciona host key do servidor Debian 13
           ssh-keyscan -t ed25519 -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
 
       - name: Testar conexão SSH
         run: |
-          ssh -i ~/.ssh/id_ed25519 -o StrictHostKeyChecking=yes -o UserKnownHostsFile=~/.ssh/known_hosts \
+          ssh -i ~/.ssh/jocerlan -o StrictHostKeyChecking=yes -o UserKnownHostsFile=~/.ssh/known_hosts \
             jocerlan@${{ secrets.EC2_HOST }} "echo ✅ Conexão com Debian 13 OK!"
 
       - name: Deploy no servidor Debian 13
         run: |
-          ssh -i ~/.ssh/id_ed25519 -o StrictHostKeyChecking=yes -o UserKnownHostsFile=~/.ssh/known_hosts \
+          ssh -i ~/.ssh/jocerlan -o StrictHostKeyChecking=yes -o UserKnownHostsFile=~/.ssh/known_hosts \
             jocerlan@${{ secrets.EC2_HOST }} "
               set -e
               cd /home/jocerlan || exit

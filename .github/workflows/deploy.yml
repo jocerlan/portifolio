@@ -31,12 +31,12 @@ jobs:
 
             if [ ! -d meu-site ]; then
               echo '📥 Clonando projeto pela primeira vez...'
-              git clone git@github.com:jocerlan/portifolio.git meu-site
+              git clone https://github.com/jocerlan/portifolio.git meu-site
             else
               if [ ! -d meu-site/.git ]; then
                 echo '⚠️ Pasta existe mas não é repositório Git, removendo...'
                 rm -rf meu-site
-                git clone git@github.com:jocerlan/portifolio.git meu-site
+                git clone https://github.com/jocerlan/portifolio.git meu-site
               else
                 echo '🔄 Atualizando repositório existente...'
                 cd meu-site

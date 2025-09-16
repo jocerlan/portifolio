@@ -13,39 +13,37 @@ jobs:
       - name: Checkout código
         uses: actions/checkout@v3
 
-      - name: Configurar chave SSH (Ed25519)
+      - name: Configurar chave SSH (RSA 4096)
         run: |
-          mkdir -p ~/jocerlan/.ssh
-          echo "${{ secrets.EC2_SSH_KEY }}" > ~/jocerlan/.ssh/id_ed25519
-          chmod 600 ~/jocerlan/.ssh/id_ed25519
-          # adiciona host key do servidor Debian 13
-          ssh-keyscan -t ed25519 -H ${{ secrets.EC2_HOST }} >> ~/jocerlan/.ssh/known_hosts
+          mkdir -p ~/.ssh
+          echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          # adiciona a host key do servidor Debian 13
+          ssh-keyscan -t rsa -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
 
       - name: Testar conexão SSH
         run: |
-          ssh -i ~/jocerlan/.ssh/id_ed25519 -o StrictHostKeyChecking=yes -o UserKnownHostsFile=~/jocerlan/.ssh/known_hosts \
-            jocerlan@${{ secrets.EC2_HOST }} "echo ✅ Conexão com Debian 13 OK!"
+          ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=yes jocerlan@${{ secrets.EC2_HOST }} "echo ✅ Conexão com Debian 13 OK!"
 
       - name: Deploy no servidor Debian 13
         run: |
-          ssh -i ~/jocerlan/.ssh/id_ed25519 -o StrictHostKeyChecking=yes -o UserKnownHostsFile=~/jocerlan/.ssh/known_hosts \
-            jocerlan@${{ secrets.EC2_HOST }} "
-              set -e
-              cd /home/jocerlan || exit
-              
-              if [ ! -d meu-site ]; then
-                git clone https://github.com/jocerlan/portifolio.git meu-site
-              fi
+          ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=yes jocerlan@${{ secrets.EC2_HOST }} "
+            set -e
+            cd /home/jocerlan || exit
 
-              cd meu-site
-              git fetch origin main
-              git reset --hard origin/main
+            if [ ! -d meu-site ]; then
+              git clone https://github.com/jocerlan/portifolio.git meu-site
+            fi
 
-              # parar e remover containers antigos se existirem
-              sudo docker stop site-estatico || true
-              sudo docker rm site-estatico || true
+            cd meu-site
+            git fetch origin main
+            git reset --hard origin/main
 
-              # reconstruir e subir container
-              sudo docker build -t site-estatico .
-              sudo docker run -d --restart always -p 80:80 --name site-estatico site-estatico
-            "
+            # parar e remover containers antigos se existirem
+            sudo docker stop site-estatico || true
+            sudo docker rm site-estatico || true
+
+            # reconstruir e subir container atualizado
+            sudo docker build -t site-estatico .
+            sudo docker run -d --restart always -p 80:80 --name site-estatico site-estatico
+          "

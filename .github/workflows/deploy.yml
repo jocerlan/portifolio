@@ -1,4 +1,4 @@
-name: Deploy to EC2 Debian 13
+name: Deploy para EC2 Debian 13
 
 on:
   push:
@@ -10,50 +10,46 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout código
+      - name: Checkout do código
         uses: actions/checkout@v3
 
-      - name: Configurar chave SSH (RSA 4096)
+      - name: Configurar chave SSH
         run: |
           mkdir -p ~/.ssh
           echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
-          # adiciona a host key do servidor Debian 13
-          ssh-keyscan -t rsa -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
+          ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
 
       - name: Testar conexão SSH
+        run: ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no jocerlan@${{ secrets.EC2_HOST }} "echo ✅ Conexão OK!"
+
+      - name: Deploy no servidor Debian 13
         run: |
-          ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=yes jocerlan@${{ secrets.EC2_HOST }} "echo ✅ Conexão com Debian 13 OK!"
+          ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=yes jocerlan@${{ secrets.EC2_HOST }} "
+            set -e
+            cd /home/jocerlan || exit
 
-     - name: Deploy no servidor Debian 13
-  run: |
-    ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=yes jocerlan@${{ secrets.EC2_HOST }} "
-      set -e
-      cd /home/jocerlan || exit
+            if [ ! -d meu-site ]; then
+              echo '📥 Clonando projeto pela primeira vez...'
+              git clone git@github.com:jocerlan/portifolio.git meu-site
+            else
+              if [ ! -d meu-site/.git ]; then
+                echo '⚠️ Pasta existe mas não é repositório Git, removendo...'
+                rm -rf meu-site
+                git clone git@github.com:jocerlan/portifolio.git meu-site
+              else
+                echo '🔄 Atualizando repositório existente...'
+                cd meu-site
+                git fetch origin main
+                git reset --hard origin/main
+              fi
+            fi
 
-      if [ ! -d meu-site ]; then
-        echo 'Clonando projeto pela primeira vez...'
-        git clone git@github.com:jocerlan/portifolio.git meu-site
-      else
-        if [ ! -d meu-site/.git ]; then
-          echo '⚠️ Pasta existe mas não é repositório Git, removendo...'
-          rm -rf meu-site
-          git clone git@github.com:jocerlan/portifolio.git meu-site
-        else
-          echo 'Atualizando repositório existente...'
-          cd meu-site
-          git fetch origin main
-          git reset --hard origin/main
-        fi
-      fi
+            cd meu-site
 
-      cd meu-site
-
-      # parar e remover containers antigos se existirem
-      sudo docker stop site-estatico || true
-      sudo docker rm site-estatico || true
-
-      # reconstruir e subir container atualizado
-      sudo docker build -t site-estatico .
-      sudo docker run -d --restart always -p 80:80 --name site-estatico site-estatico
-    "
+            echo '🐳 Recriando container Docker...'
+            sudo docker stop site-estatico || true
+            sudo docker rm site-estatico || true
+            sudo docker build -t site-estatico .
+            sudo docker run -d --restart always -p 80:80 --name site-estatico site-estatico
+          "

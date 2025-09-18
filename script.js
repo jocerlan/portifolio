@@ -91,35 +91,137 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // Formulário de contato
-const contactForm = document.querySelector('.contact-form');
+const contactForm = document.getElementById('contact-form');
+const submitBtn = document.getElementById('submit-btn');
+const btnText = submitBtn.querySelector('.btn-text');
+const btnLoading = submitBtn.querySelector('.btn-loading');
+const formMessage = document.getElementById('form-message');
+
 if (contactForm) {
-    contactForm.addEventListener('submit', (e) => {
+    contactForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         
-        // Aqui você pode adicionar a lógica para enviar o formulário
-        // Por exemplo, usando fetch para uma API ou email service
+        // Validar formulário
+        if (!validateForm()) {
+            return;
+        }
         
-        // Simulação de envio
-        const submitBtn = contactForm.querySelector('button[type="submit"]');
-        const originalText = submitBtn.textContent;
+        // Mostrar estado de loading
+        setLoadingState(true);
         
-        submitBtn.textContent = 'Enviando...';
-        submitBtn.disabled = true;
-        
-        setTimeout(() => {
-            submitBtn.textContent = 'Mensagem Enviada!';
-            submitBtn.style.background = 'linear-gradient(135deg, #10b981, #059669)';
+        try {
+            // Preparar dados do formulário
+            const formData = new FormData(contactForm);
+            formData.append('_subject', 'Contato do Portfólio - ' + (formData.get('assunto') || 'Nova mensagem'));
+            formData.append('_replyto', formData.get('email'));
             
-            // Reset do formulário
-            contactForm.reset();
+            // Enviar para Formspree
+            const response = await fetch(contactForm.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'Accept': 'application/json'
+                }
+            });
             
-            setTimeout(() => {
-                submitBtn.textContent = originalText;
-                submitBtn.disabled = false;
-                submitBtn.style.background = '';
-            }, 3000);
-        }, 2000);
+            if (response.ok) {
+                showMessage('Mensagem enviada com sucesso! Entrarei em contato em breve.', 'success');
+                contactForm.reset();
+            } else {
+                const data = await response.json();
+                if (data.errors) {
+                    showMessage('Erro: ' + data.errors.map(e => e.message).join(', '), 'error');
+                } else {
+                    throw new Error('Erro ao enviar mensagem');
+                }
+            }
+            
+        } catch (error) {
+            console.error('Erro ao enviar email:', error);
+            showMessage('Erro ao enviar mensagem. Tente novamente ou entre em contato diretamente pelo email.', 'error');
+        } finally {
+            setLoadingState(false);
+        }
     });
+}
+
+// Função para validar formulário
+function validateForm() {
+    const nome = document.getElementById('nome').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const mensagem = document.getElementById('mensagem').value.trim();
+    
+    if (!nome) {
+        showMessage('Por favor, preencha seu nome.', 'error');
+        document.getElementById('nome').focus();
+        return false;
+    }
+    
+    if (!email) {
+        showMessage('Por favor, preencha seu email.', 'error');
+        document.getElementById('email').focus();
+        return false;
+    }
+    
+    if (!isValidEmail(email)) {
+        showMessage('Por favor, insira um email válido.', 'error');
+        document.getElementById('email').focus();
+        return false;
+    }
+    
+    if (!mensagem) {
+        showMessage('Por favor, escreva sua mensagem.', 'error');
+        document.getElementById('mensagem').focus();
+        return false;
+    }
+    
+    if (mensagem.length < 10) {
+        showMessage('A mensagem deve ter pelo menos 10 caracteres.', 'error');
+        document.getElementById('mensagem').focus();
+        return false;
+    }
+    
+    return true;
+}
+
+// Função para validar email
+function isValidEmail(email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+}
+
+// Função para mostrar mensagens
+function showMessage(text, type) {
+    formMessage.textContent = text;
+    formMessage.className = `form-message ${type}`;
+    formMessage.style.display = 'block';
+    
+    // Adicionar animação de shake para erros
+    if (type === 'error') {
+        formMessage.classList.add('form-error');
+        setTimeout(() => {
+            formMessage.classList.remove('form-error');
+        }, 500);
+    }
+    
+    // Auto-hide após 5 segundos
+    setTimeout(() => {
+        formMessage.style.display = 'none';
+    }, 5000);
+}
+
+// Função para controlar estado de loading
+function setLoadingState(loading) {
+    if (loading) {
+        submitBtn.disabled = true;
+        btnText.style.display = 'none';
+        btnLoading.style.display = 'flex';
+        formMessage.style.display = 'none';
+    } else {
+        submitBtn.disabled = false;
+        btnText.style.display = 'inline';
+        btnLoading.style.display = 'none';
+    }
 }
 
 // Efeito de parallax sutil no header
@@ -212,7 +314,7 @@ document.addEventListener('DOMContentLoaded', () => {
         card.addEventListener('mouseleave', () => {
             card.style.transform = 'translateY(0) scale(1)';
         });
-    });
+  });
 });
 
 // Navegação por teclado

@@ -772,6 +772,58 @@ section {
     min-height: 120px;
 }
 
+/* Mensagens de feedback do formulário */
+.form-message {
+    margin-top: 1rem;
+    padding: 1rem;
+    border-radius: 0.75rem;
+    font-weight: 500;
+    text-align: center;
+    transition: var(--transition);
+}
+
+.form-message.success {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: var(--white);
+    border: 1px solid #059669;
+}
+
+.form-message.error {
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    color: var(--white);
+    border: 1px solid #dc2626;
+}
+
+.form-message.info {
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    color: var(--white);
+    border: 1px solid var(--secondary);
+}
+
+/* Botão de loading */
+.btn-loading {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none !important;
+}
+
+/* Animação de shake para erros */
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
+
+.form-error {
+    animation: shake 0.5s ease-in-out;
+}
+
 /* Footer */
 .footer {
     background: var(--gray-900);

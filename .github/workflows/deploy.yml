@@ -29,27 +29,30 @@ jobs:
             set -e
             cd /home/jocerlan || exit
 
-            if [ ! -d meu-site ]; then
+            if [ ! -d portifolio ]; then
               echo '📥 Clonando projeto pela primeira vez...'
-              git clone https://github.com/jocerlan/portifolio.git meu-site
+              git clone https://github.com/jocerlan/portifolio.git portifolio
             else
-              if [ ! -d meu-site/.git ]; then
+              if [ ! -d portifolio/.git ]; then
                 echo '⚠️ Pasta existe mas não é repositório Git, removendo...'
-                rm -rf meu-site
-                git clone https://github.com/jocerlan/portifolio.git meu-site
+                rm -rf portifolio
+                git clone https://github.com/jocerlan/portifolio.git portifolio
               else
                 echo '🔄 Atualizando repositório existente...'
-                cd meu-site
+                cd portifolio
                 git fetch origin main
                 git reset --hard origin/main
+                cd ..
               fi
             fi
 
-            cd meu-site
+            cd portifolio
 
             echo '🐳 Recriando container Docker...'
             sudo docker stop site-estatico || true
             sudo docker rm site-estatico || true
             sudo docker build -t site-estatico .
             sudo docker run -d --restart always -p 80:80 --name site-estatico site-estatico
+            
+            echo '✅ Deploy concluído com sucesso!'
           "

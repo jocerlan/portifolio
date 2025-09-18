@@ -1,0 +1,29 @@
+# Git
+.git
+.gitignore
+
+# GitHub Actions
+.github
+
+# Docker
+Dockerfile
+.dockerignore
+deploy-local.sh
+
+# Documentation
+README.md
+
+# IDE
+.vscode
+.idea
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.temp
